@@ -7,18 +7,19 @@ import javax.swing.table.DefaultTableModel;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+
 /**
  *
- * @author Adm
+ * @author davil
  */
-public class listagemVIEW extends javax.swing.JFrame {
+public class vendasVIEW extends javax.swing.JFrame {
 
     /**
-     * Creates new form listagemVIEW
+     * Creates new form vendasVIEW
      */
-    public listagemVIEW() {
+    public vendasVIEW() {
         initComponents();
-        listarProdutos();
+        listarProdutosVendidos();
     }
 
     /**
@@ -31,7 +32,7 @@ public class listagemVIEW extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        listaProdutos = new javax.swing.JTable();
+        listaProdutosVendidos = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -43,7 +44,7 @@ public class listagemVIEW extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        listaProdutos.setModel(new javax.swing.table.DefaultTableModel(
+        listaProdutosVendidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -54,10 +55,10 @@ public class listagemVIEW extends javax.swing.JFrame {
                 "ID", "Nome", "Valor", "Status"
             }
         ));
-        jScrollPane1.setViewportView(listaProdutos);
+        jScrollPane1.setViewportView(listaProdutosVendidos);
 
         jLabel1.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        jLabel1.setText("Lista de Produtos");
+        jLabel1.setText("Listagem de Vendas");
 
         jLabel2.setFont(new java.awt.Font("Lucida Fax", 0, 14)); // NOI18N
         jLabel2.setText("Vender Produto (ID)");
@@ -105,7 +106,7 @@ public class listagemVIEW extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(btnVendas, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -125,7 +126,7 @@ public class listagemVIEW extends javax.swing.JFrame {
                     .addComponent(btnVender))
                 .addGap(29, 29, 29)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVendas)
                     .addComponent(btnVoltar))
@@ -152,7 +153,7 @@ public class listagemVIEW extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Erro ao vender o produto!");
         }
 
-        listarProdutos();  // Atualiza a listagem
+        listarProdutosVendidos();  // Atualiza a listagem
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
@@ -181,22 +182,43 @@ public class listagemVIEW extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(listagemVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(vendasVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(listagemVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(vendasVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(listagemVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(vendasVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(listagemVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(vendasVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new listagemVIEW().setVisible(true);
+                new vendasVIEW().setVisible(true);
             }
         });
+    }
+    private void listarProdutosVendidos() {
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
+
+            DefaultTableModel model = (DefaultTableModel) listaProdutosVendidos.getModel();
+            model.setNumRows(0);
+
+            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutosVendidos();
+
+            for (int i = 0; i < listagem.size(); i++) {
+                model.addRow(new Object[]{
+                    listagem.get(i).getId(),
+                    listagem.get(i).getNome(),
+                    listagem.get(i).getValor(),
+                    listagem.get(i).getStatus()
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -209,30 +231,7 @@ public class listagemVIEW extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable listaProdutos;
+    private javax.swing.JTable listaProdutosVendidos;
     // End of variables declaration//GEN-END:variables
 
-    private void listarProdutos() {
-        try {
-            ProdutosDAO produtosdao = new ProdutosDAO();
-
-            DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
-            model.setNumRows(0);
-
-            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
-
-            System.out.println("Número de produtos: " + listagem.size());  // Adicione esta linha
-
-            for (int i = 0; i < listagem.size(); i++) {
-                model.addRow(new Object[]{
-                    listagem.get(i).getId(),
-                    listagem.get(i).getNome(),
-                    listagem.get(i).getValor(),
-                    listagem.get(i).getStatus()
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();  // Adicione esta linha para imprimir qualquer exceção no console
-        }
-    }
 }
